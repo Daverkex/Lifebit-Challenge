@@ -18,9 +18,18 @@ clean: ## Clean project temporal files
 	@find . -type d -name ".terragrunt-cache" -prune -print -exec rm -rf {} \;
 	@find . -type d -name ".terraform" -prune -print -exec rm -rf {} \;
 
+
+# Load test
+.PHONY: load-test
+load-test: ## Run K6 for load testing
+	k6 run app/test/http_get.js
+
+
 # Add custom targets here
 -include custom.mk
 
+
+# Self documentation
 .PHONY: list
 list: ## List all make targets
 	@${MAKE} -pRrn : -f $(MAKEFILE_LIST) 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' \
