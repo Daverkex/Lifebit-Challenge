@@ -3,3 +3,8 @@ variable "default_tags" {
   default     = {}
   description = "Default tags filled usually by Terragrunt"
 }
+
+variable "name" {
+  type        = string
+  description = "VPC name"
+}
