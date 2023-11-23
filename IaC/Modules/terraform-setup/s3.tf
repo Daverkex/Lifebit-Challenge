@@ -33,7 +33,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "root" {
   bucket = aws_s3_bucket.root.id
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = "aws:kms"
     }
   }
 }
@@ -53,6 +53,45 @@ resource "aws_s3_bucket_lifecycle_configuration" "root" {
     }
     noncurrent_version_expiration {
       noncurrent_days = 180
+    }
+  }
+}
+
+// Terragrunt recommended bucket policy
+resource "aws_s3_bucket_policy" "root" {
+  bucket = aws_s3_bucket.root.id
+  policy = data.aws_iam_policy_document.root.json
+}
+data "aws_caller_identity" "current" {}
+data "aws_iam_policy_document" "root" {
+  statement {
+    sid = "RootAccess"
+    principals {
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      type        = "AWS"
+    }
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.root.arn,
+      "${aws_s3_bucket.root.arn}/*"
+    ]
+  }
+  statement {
+    sid    = "EnforcedTLS"
+    effect = "Deny"
+    principals {
+      identifiers = ["*"]
+      type        = "*"
+    }
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.root.arn,
+      "${aws_s3_bucket.root.arn}/*"
+    ]
+    condition {
+      test     = "Bool"
+      values   = ["false"]
+      variable = "aws:SecureTransport"
     }
   }
 }
