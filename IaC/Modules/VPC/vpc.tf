@@ -1,24 +1,28 @@
 data "aws_availability_zones" "available" {}
+
+locals {
+  azs = data.aws_availability_zones.available.names
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.2"
 
   name = var.name
 
-  azs         = data.aws_availability_zones.available.names
-  enable_ipv6 = true
+  azs         = local.azs
 
-  public_subnet_ipv6_native    = true
-  public_subnet_ipv6_prefixes  = [0, 1, 2]
-  private_subnet_ipv6_native   = true
-  private_subnet_ipv6_prefixes = [3, 4, 5]
+  enable_nat_gateway = true
+  single_nat_gateway = true
 
-  # RDS currently only supports dual-stack so IPv4 CIDRs will need to be provided for subnets
-  # database_subnet_ipv6_native   = true
-  # database_subnet_ipv6_prefixes = [6, 7, 8]
+  private_subnets  = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 8, k)]
+  public_subnets   = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 8, k + 4)]
 
-  enable_nat_gateway     = false
-  create_egress_only_igw = true
+  enable_ipv6                                   = true
+  public_subnet_assign_ipv6_address_on_creation = true
+
+  public_subnet_ipv6_prefixes   = [0, 1, 2]
+  private_subnet_ipv6_prefixes  = [3, 4, 5]
 
   tags = merge(var.default_tags,
     {

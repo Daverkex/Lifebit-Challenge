@@ -6,23 +6,12 @@ locals {
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "${get_parent_terragrunt_dir()}/../Modules/github-credentials/role//"
+  source = "${get_parent_terragrunt_dir()}/../Modules/ECS/Service//"
 }
 
 # Include all settings from the root terragrunt.hcl file
 include {
   path = find_in_parent_folders()
-}
-
-dependency "ecr" {
-  config_path = "../ECR"
-
-  # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
-  # module hasn't been applied yet.
-  mock_outputs_allowed_terraform_commands = ["validate"]
-  mock_outputs = {
-    ecr_arn = "fake-ecr-arn"
-  }
 }
 
 dependency "ecs" {
@@ -32,33 +21,35 @@ dependency "ecs" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
-    cluster_name = "fake-cluster"
+    cluster_arn = "fake-arn"
   }
 }
 
-dependency "app" {
-  config_path = "../app"
+dependency "vpc" {
+  config_path = "../../Common/VPC"
 
   # Configure mock outputs for the `validate` command that are returned when there are no outputs available (e.g the
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
-    task_definition_role_arn = "fake-arn"
-    task_execution_role_arn = "fake-arn"
-    service_name = "fake-service"
+    public_subnets_ids = ["fake-subnet-1", "fake-subnet-2", "fake-subnet-3"]
   }
 }
 
 dependencies {
-  paths = ["../app", "../ECR", "../ECS-cluster"]
+  paths = ["../ECS-cluster"]
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  ecs_name   = dependency.ecs.outputs.cluster_name
-  task_definition_role_arn = dependency.app.outputs.task_definition_role_arn
-  task_execution_role_arn  = dependency.app.outputs.task_execution_role_arn
-  service_name = dependency.app.outputs.service_name
-  ecr_arn   = dependency.ecr.outputs.ecr_arn
-  repo_name = "Daverkex/Lifebit-Challenge"
+  name    = "challenge-app"
+  cluster_arn = dependency.ecs.outputs.cluster_arn
+  target_group_arn = dependency.ecs.outputs.target_group_arn
+  capacity_provider_name = dependency.ecs.outputs.capacity_provider_name
+  alb_subnets = dependency.vpc.outputs.public_subnets_ids
+  cpu = 512
+  memory = 256
+  container_name = "app"
+  container_image = "791727025417.dkr.ecr.eu-west-1.amazonaws.com/challenge:2388d4ebc1e4ceb2956ae603848063d72b31b76b"
+  container_port = 3000
 }
