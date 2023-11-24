@@ -9,8 +9,8 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id  = data.aws_subnet.subnet.vpc_id
-  subnets = var.alb_subnets
+  vpc_id          = data.aws_subnet.subnet.vpc_id
+  subnets         = var.alb_subnets
   ip_address_type = "dualstack"
 
   enable_deletion_protection = false // ToDo: Remove in a real environment

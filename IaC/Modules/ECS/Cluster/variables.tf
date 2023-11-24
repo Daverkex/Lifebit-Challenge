@@ -4,12 +4,12 @@ variable "name" {
 }
 
 variable "subnets" {
-  type = list(string)
+  type        = list(string)
   description = "Subnets where deploy the nodes"
 }
 
 variable "alb_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "Subnets where deploy the ALB"
 }
 

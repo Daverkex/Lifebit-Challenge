@@ -1,5 +1,5 @@
 module "ecs_service" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
+  source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "~> 5.7"
 
   name        = var.name
@@ -7,8 +7,8 @@ module "ecs_service" {
 
   autoscaling_max_capacity = 2
 
-  cpu    = var.cpu
-  memory = var.memory
+  cpu                      = var.cpu
+  memory                   = var.memory
   requires_compatibilities = ["EC2"]
   capacity_provider_strategy = {
     # On-demand instances
@@ -19,7 +19,7 @@ module "ecs_service" {
     }
   }
 
-  subnet_ids = var.alb_subnets
+  subnet_ids   = var.alb_subnets
   network_mode = "bridge"
   container_definitions = {
     app = {
@@ -29,9 +29,9 @@ module "ecs_service" {
       image     = var.container_image
       port_mappings = [
         {
-          name = "app"
+          name          = "app"
           containerPort = 3000
-          protocol = "tcp"
+          protocol      = "tcp"
         }
       ]
     }

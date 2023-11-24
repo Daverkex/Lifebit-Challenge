@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "cicd" {
     resources = ["*"]
   }
   statement {
-    sid = "PassRolesInTaskDefinition"
+    sid     = "PassRolesInTaskDefinition"
     actions = ["iam:PassRole"]
     resources = [
       var.task_definition_role_arn,

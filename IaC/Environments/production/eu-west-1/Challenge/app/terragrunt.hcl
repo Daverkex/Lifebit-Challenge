@@ -42,14 +42,14 @@ dependencies {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  name    = "challenge-app"
-  cluster_arn = dependency.ecs.outputs.cluster_arn
-  target_group_arn = dependency.ecs.outputs.target_group_arn
+  name                   = "challenge-app"
+  cluster_arn            = dependency.ecs.outputs.cluster_arn
+  target_group_arn       = dependency.ecs.outputs.target_group_arn
   capacity_provider_name = dependency.ecs.outputs.capacity_provider_name
-  alb_subnets = dependency.vpc.outputs.public_subnets_ids
-  cpu = 512
-  memory = 256
-  container_name = "app"
-  container_image = "791727025417.dkr.ecr.eu-west-1.amazonaws.com/challenge:2388d4ebc1e4ceb2956ae603848063d72b31b76b"
-  container_port = 3000
+  alb_subnets            = dependency.vpc.outputs.public_subnets_ids
+  cpu                    = 512
+  memory                 = 256
+  container_name         = "app"
+  container_image        = "791727025417.dkr.ecr.eu-west-1.amazonaws.com/challenge:2388d4ebc1e4ceb2956ae603848063d72b31b76b"
+  container_port         = 3000
 }

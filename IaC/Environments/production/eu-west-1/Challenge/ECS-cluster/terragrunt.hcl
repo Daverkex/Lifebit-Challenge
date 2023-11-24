@@ -29,5 +29,5 @@ dependency "vpc" {
 inputs = {
   subnets = dependency.vpc.outputs.private_subnets_ids
   alb_subnets = dependency.vpc.outputs.public_subnets_ids
-  name    = "Challenge"
+  name        = "Challenge"
 }

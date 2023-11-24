@@ -9,17 +9,17 @@ variable "ecs_name" {
 }
 
 variable "task_definition_role_arn" {
-  type = string
+  type        = string
   description = "Task definition role ARN for task to deploy"
 }
 
 variable "task_execution_role_arn" {
-  type = string
+  type        = string
   description = "Task execution role ARN for task to deploy"
 }
 
 variable "service_name" {
-  type = string
+  type        = string
   description = "Service ARN for service to update"
 }
 

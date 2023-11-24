@@ -4,47 +4,47 @@ variable "name" {
 }
 
 variable "cluster_arn" {
-  type = string
+  type        = string
   description = "Cluster where create the service"
 }
 
 variable "capacity_provider_name" {
-  type = string
+  type        = string
   description = "Capacity provider name for this service"
 }
 
 variable "cpu" {
-  type = number
+  type        = number
   description = "CPU units for this service and task"
 }
 
 variable "memory" {
-  type = number
+  type        = number
   description = "Memory in MB for this service and task"
 }
 
 variable "container_name" {
-  type = string
+  type        = string
   description = "The container name for this task"
 }
 
 variable "container_image" {
-  type = string
+  type        = string
   description = "The container image to deploy"
 }
 
 variable "container_port" {
-  type = number
+  type        = number
   description = "Container port to bind"
 }
 
 variable "alb_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "Subnets where deploy the service"
 }
 
 variable "target_group_arn" {
-  type = string
+  type        = string
   description = "The ALB taget group where bind this service"
 }
 

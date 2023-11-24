@@ -19,6 +19,12 @@ clean: ## Clean project temporal files
 	@find . -type d -name ".terraform" -prune -print -exec rm -rf {} \;
 
 
+# Terraform auto documentation
+.PHONY: generate-tf-doc
+generate-tf-doc:
+	@find IaC/Modules -type f -name "*.tf" -not -path "*/.terraform/*" -exec dirname  "{}" \; | sort -u | xargs -L1 terraform-docs markdown table
+
+
 # Load test
 .PHONY: load-test
 load-test: ## Run K6 for load testing

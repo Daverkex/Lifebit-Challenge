@@ -44,8 +44,8 @@ dependency "app" {
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
     task_definition_role_arn = "fake-arn"
-    task_execution_role_arn = "fake-arn"
-    service_name = "fake-service"
+    task_execution_role_arn  = "fake-arn"
+    service_name             = "fake-service"
   }
 }
 
@@ -55,10 +55,10 @@ dependencies {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  ecs_name   = dependency.ecs.outputs.cluster_name
+  ecs_name                 = dependency.ecs.outputs.cluster_name
   task_definition_role_arn = dependency.app.outputs.task_definition_role_arn
   task_execution_role_arn  = dependency.app.outputs.task_execution_role_arn
-  service_name = dependency.app.outputs.service_name
-  ecr_arn   = dependency.ecr.outputs.ecr_arn
-  repo_name = "Daverkex/Lifebit-Challenge"
+  service_name             = dependency.app.outputs.service_name
+  ecr_arn                  = dependency.ecr.outputs.ecr_arn
+  repo_name                = "Daverkex/Lifebit-Challenge"
 }
