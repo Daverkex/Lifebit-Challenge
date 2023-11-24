@@ -43,6 +43,14 @@ module "autoscaling" {
   )
   ignore_desired_capacity_changes = true
 
+  network_interfaces = [{
+    delete_on_termination       = true
+    description                 = "eth0"
+    device_index                = 0
+    security_groups             = [module.autoscaling_sg.security_group_id]
+    associate_public_ip_address = true
+  }]
+
   create_iam_instance_profile = true
   iam_role_name               = var.name
   iam_role_description        = "ECS role for ${var.name}"

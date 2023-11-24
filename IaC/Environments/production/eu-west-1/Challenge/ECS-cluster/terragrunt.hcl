@@ -21,13 +21,13 @@ dependency "vpc" {
   # module hasn't been applied yet.
   mock_outputs_allowed_terraform_commands = ["validate"]
   mock_outputs = {
-    private_subnets_ids = ["fake-subnet-1", "fake-subnet-2", "fake-subnet-3"]
+    public_subnets_ids = ["fake-subnet-1", "fake-subnet-2", "fake-subnet-3"]
   }
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  subnets = dependency.vpc.outputs.private_subnets_ids
+  subnets     = dependency.vpc.outputs.public_subnets_ids
   alb_subnets = dependency.vpc.outputs.public_subnets_ids
   name        = "Challenge"
 }
