@@ -17,3 +17,8 @@ output "target_group_arn" {
   value       = module.alb.target_groups["ex_ecs"].arn
   description = "The load balancer target group ARN binded to this cluster"
 }
+
+output "alb_public_url" {
+  value       = module.alb.dns_name
+  description = "The public DNS for the load balancer"
+}

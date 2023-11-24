@@ -5,7 +5,7 @@
 -include override.mk
 
 # IaC
-.PHONY: fmt check clean
+.PHONY: fmt check clean deploy-common deploy-app deploy-all get-dns
 fmt: ## Format IaC code
 	@cd IaC && terragrunt hclfmt
 	@cd IaC && terraform fmt --recursive
@@ -18,10 +18,21 @@ clean: ## Clean project temporal files
 	@find . -type d -name ".terragrunt-cache" -prune -print -exec rm -rf {} \;
 	@find . -type d -name ".terraform" -prune -print -exec rm -rf {} \;
 
+deploy-common: ## Deploy common IaC
+	@terragrunt run-all apply --terragrunt-non-interactive --terragrunt-working-dir IaC/Environments/production/eu-west-1/Common
+
+deploy-app: ## Deploy the necessary infra for the application
+	@terragrunt run-all apply --terragrunt-non-interactive --terragrunt-working-dir IaC/Environments/production/eu-west-1/Challenge
+
+deploy-all: deploy-common deploy-app ## Deploy all the IaC
+
+get-dns: ## Get the DNS for the application
+	@terragrunt output "alb_public_url" --terragrunt-working-dir IaC/Environments/production/eu-west-1/Challenge/ECS-cluster
+
 
 # Terraform auto documentation
-.PHONY: generate-tf-doc
-generate-tf-doc:
+.PHONY: gen-tf-doc
+gen-tf-doc: ## Generate Terraform documentation
 	@find IaC/Modules -type f -name "*.tf" -not -path "*/.terraform/*" -exec dirname  "{}" \; | sort -u | xargs -L1 terraform-docs markdown table
 
 

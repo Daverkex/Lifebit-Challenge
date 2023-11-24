@@ -39,6 +39,7 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_alb_public_url"></a> [alb\_public\_url](#output\_alb\_public\_url) | The public DNS for the load balancer |
 | <a name="output_capacity_provider_name"></a> [capacity\_provider\_name](#output\_capacity\_provider\_name) | The capacity provider name |
 | <a name="output_cluster_arn"></a> [cluster\_arn](#output\_cluster\_arn) | The cluster ARN |
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The cluster name |
